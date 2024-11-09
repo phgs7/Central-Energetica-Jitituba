@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energia Elétrica Exportada Anual</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Energia Elétrica Exportada Anual MW/h</h1>
+    </header>
+    <main id="conteudo-dados">
+        <!-- Dados dos anos serão inseridos aqui pelo JavaScript -->
+    </main>
+    <footer>
+        <p>&copy; 2024 Central Energetica Jitituba LTDA</p>
+    </footer>
+    <script>
+        // Função para buscar e exibir dados da usina
+        function buscarDados() {
+            fetch('/dados') // Chama a rota que retorna os dados
+                .then(response => response.json())
+                .then(data => {
+                    const conteudoDados = document.getElementById('conteudo-dados');
+                    conteudoDados.innerHTML = ''; // Limpa o conteúdo antes de adicionar novos dados
+
+                    // Agrupa os dados por ano
+                    const dadosPorAno = data.reduce((acc, item) => {
+                        if (!acc[item.ano]) {
+                            acc[item.ano] = [];
+                        }
+                        acc[item.ano].push(item);
+                        return acc;
+                    }, {});
+
+                    // Cria uma seção para cada ano
+                    Object.keys(dadosPorAno).sort((a, b) => b - a).forEach(ano => {
+                        // Adiciona o título do ano
+                        const tituloAno = document.createElement('h2');
+                        tituloAno.innerText = `Ano ${ano}`;
+                        conteudoDados.appendChild(tituloAno);
+
+                        // Cria a tabela para os meses do ano
+                        const tabela = document.createElement('table');
+                        tabela.innerHTML = `
+                            <thead>
+                                <tr>
+                                    <th>Mês</th>
+                                    <th>Energia Produzida (kWh)</th>
+                                    <th>Energia Exportada (kWh)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${dadosPorAno[ano].map(item => `
+                                    <tr>
+                                        <td>${item.mes}</td>
+                                        <td>${item.energia_produzida}</td>
+                                        <td>${item.energia_exportada}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        `;
+                        conteudoDados.appendChild(tabela);
+                    });
+                })
+                .catch(error => console.error('Erro ao buscar dados:', error));
+        }
+
+        // Chama a função ao carregar a página
+        document.addEventListener('DOMContentLoaded', buscarDados);
+    </script>
+</body>
+</html>

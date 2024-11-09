@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dados da Usina</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Dados da Usina</h1>
+    </header>
+    <main>
+        <table id="dados-usina">
+            <thead>
+                <tr>
+                    <th>Ano</th>
+                    <th>Mês</th>
+                    <th>Energia Produzida (kWh)</th>
+                    <th>Energia Exportada (kWh)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% dados.forEach(dado => { %>
+                    <tr>
+                        <td><%= dado.ano %></td>
+                        <td><%= dado.mes %></td>
+                        <td><%= dado.energia_produzida %></td>
+                        <td><%= dado.energia_exportada %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <p>&copy; 2023 Usina de Exemplo</p>
+    </footer>
+</body>
+</html>
